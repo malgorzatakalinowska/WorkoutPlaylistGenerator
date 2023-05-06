@@ -1,10 +1,10 @@
 package pl.coderslab.workoutplaylistgenerator.workout;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import pl.coderslab.workoutplaylistgenerator.exception.IdMismatchException;
+import pl.coderslab.workoutplaylistgenerator.exception.ResourceNotFoundException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -36,10 +36,10 @@ public class WorkoutService {
     public WorkoutDto updateWorkout(Long id, WorkoutDto dto) {
         Assert.notNull(dto.getId(), "Id cannot be empty");
         if(!dto.getId().equals(id)) {
-            throw new IllegalArgumentException("Ids mismatch");
+            throw new IdMismatchException("Ids mismatch");
         }
         if(!workoutRepository.existsById(id)) {
-            throw new EntityNotFoundException("Workout doesn't exist");
+            throw new ResourceNotFoundException("Workout doesn't exist");
         }
         Workout entity = workoutMapper.mapToEntity(dto);
         workoutRepository.save(entity);
