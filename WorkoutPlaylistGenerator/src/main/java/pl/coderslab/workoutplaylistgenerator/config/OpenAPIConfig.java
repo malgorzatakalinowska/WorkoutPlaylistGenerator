@@ -12,8 +12,8 @@ public class OpenAPIConfig {
     @Bean
     public OpenAPI springOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Gosia API")
-                        .description("Moje API")
+                .info(new Info().title("Workout Playlist Generator Application API")
+                        .description("Sample application with Spring Boot and OpenAPI")
                         .version("v1.1.1"));
     }
 }
