@@ -28,7 +28,7 @@ public class WorkoutController {
         return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<WorkoutDto>> getAllWorkouts() {
         List<WorkoutDto> workouts = workoutService.getAllWorkouts();
         if (workouts.isEmpty()) {
