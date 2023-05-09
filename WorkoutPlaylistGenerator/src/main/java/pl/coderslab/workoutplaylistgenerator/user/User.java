@@ -1,8 +1,10 @@
 package pl.coderslab.workoutplaylistgenerator.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Component
 @Table(name="users")
 public class User {
     @Id
@@ -29,4 +33,10 @@ public class User {
     @Email
     @Column(unique = true, name = "email")
     private String email;
+
+    public User(String displayName, String password, String email) {
+        this.displayName = displayName;
+        this.password = password;
+        this.email = email;
+    }
 }
