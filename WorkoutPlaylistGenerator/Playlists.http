@@ -1,0 +1,19 @@
+### create playlist
+POST http://localhost:8080/playlists
+Content-Type: application/json
+
+{
+  "name": "Running playlist",
+  "description": "Playlist based on my workout preferences",
+  "userId": 6,
+  "workoutId": 57
+}
+
+### get all playlists
+GET http://localhost:8080/playlists/all
+
+### get playlist by id
+GET http://localhost:8080/playlists/1
+
+### delete playlist
+DELETE http://localhost:8080/playlists/1

@@ -1,0 +1,15 @@
+###create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "displayName": "Katarzyna",
+  "password": "coderslab",
+  "email": "kasiakatarzynakasia@test.pl"
+}
+
+###get all users
+GET http://localhost:8080/users/all
+
+###get user
+GET http://localhost:8080/users/5

@@ -3,25 +3,26 @@ POST http://localhost:8080/workouts
 Content-Type: application/json
 
 {
-  "type": "Zumba",
-  "intensity": "5"
+  "type": "ZUMBA",
+  "intensity": 10,
+  "userId": 6
 }
 
 ### get all workouts
 GET http://localhost:8080/workouts/all
 
 ### get workout by id
-GET http://localhost:8080/workouts/1
+GET http://localhost:8080/workouts/49S
 
 ### update workout
-PUT http://localhost:8080/workouts/1
+PUT http://localhost:8080/workouts/52
 Content-Type: application/json
 
 {
-  "id": "1",
-  "type": "Zumba",
-  "intensity": "6"
+  "id": 52,
+  "type": "ZUMBA",
+  "intensity": 8
 }
 
 ### delete workout
-DELETE http://localhost:8080/workouts/1
+DELETE http://localhost:8080/workouts/52
