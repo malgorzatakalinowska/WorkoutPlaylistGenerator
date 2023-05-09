@@ -1,10 +1,12 @@
 package pl.coderslab.workoutplaylistgenerator.workout;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/workouts")
@@ -17,9 +19,9 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutDto> createWorkout(@RequestBody @Valid WorkoutDto workout) {
-        WorkoutDto workoutDto = workoutService.createWorkout(workout);
-        return ResponseEntity.ok(workoutDto);
+    @ResponseStatus(HttpStatus.CREATED)
+    public WorkoutDto createWorkout(@RequestBody WorkoutDto workout) {
+        return workoutService.createWorkout(workout);
     }
 
     @GetMapping("/{id}")
