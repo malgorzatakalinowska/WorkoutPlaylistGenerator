@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="workouts")
+@Table(name = "workouts")
 @Builder
 @Component
 public class Workout {
@@ -26,7 +26,7 @@ public class Workout {
     @Column(name = "type")
     private WorkoutType type;
 
-    @Range(min=1, max=10)
+    @Range(min = 1, max = 10)
     @Column(name = "intensity")
     private int intensity;
 
