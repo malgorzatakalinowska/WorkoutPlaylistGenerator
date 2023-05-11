@@ -28,5 +28,5 @@ public class UserService {
     }
 
     public UserDto getUser(Long id) {
-        return userMapper.mapToDto(userRepository.findById(id).orElse(null));    }
+        return userMapper.mapToDto(userRepository.findById(id).orElse(null));}
 }
