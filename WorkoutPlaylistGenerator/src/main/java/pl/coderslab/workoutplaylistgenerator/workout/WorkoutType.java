@@ -4,5 +4,6 @@ public enum WorkoutType {
         ZUMBA,
         CYCLING,
         RUNNING,
-        JOGA
+        JOGA,
+        WALKING
 }

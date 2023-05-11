@@ -19,13 +19,10 @@ public class WorkoutDto {
     @NotBlank
     private String type;
 
-    @Schema(description = "Intensity of workout", example = "3", required = true)
-    private int intensity;
-
     @Schema(description = "User ID", example = "73658", required = true)
     private Long userId;
 
-    public void setUser_id(Long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 }

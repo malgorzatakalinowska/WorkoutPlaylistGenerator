@@ -20,8 +20,9 @@ public class WorkoutController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkoutDto createWorkout(@RequestBody WorkoutDto workout) {
-        return workoutService.createWorkout(workout);
+    public ResponseEntity<WorkoutDto> createUser(@RequestBody @Valid WorkoutDto workout) {
+        WorkoutDto workoutDto = workoutService.createWorkout(workout);
+        return ResponseEntity.ok(workoutDto);
     }
 
     @GetMapping("/{id}")

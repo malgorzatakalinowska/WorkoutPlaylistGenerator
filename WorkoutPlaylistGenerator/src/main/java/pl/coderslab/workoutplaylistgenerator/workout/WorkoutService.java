@@ -9,6 +9,7 @@ import pl.coderslab.workoutplaylistgenerator.user.User;
 import pl.coderslab.workoutplaylistgenerator.user.UserRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -17,20 +18,18 @@ public class WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final WorkoutMapper workoutMapper;
     private final UserRepository userRepository;
-    private final User user;
 
-    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository, User user) {
+    public WorkoutService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper, UserRepository userRepository) {
         this.workoutRepository = workoutRepository;
         this.workoutMapper = workoutMapper;
         this.userRepository = userRepository;
-        this.user = user;
     }
 
     public WorkoutDto createWorkout(WorkoutDto workoutDto) {
         if (workoutDto.getUserId() == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         } else {
-            workoutDto.setUser_id(workoutDto.getUserId());
+            workoutDto.setUserId(workoutDto.getUserId());
         }
         User user = userRepository.findById(workoutDto.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -38,28 +37,47 @@ public class WorkoutService {
         workout.setUser(user);
         workout = workoutRepository.save(workout);
         workoutDto = workoutMapper.mapToDto(workout);
-        workoutDto.setUser_id(user.getId());
+        workoutDto.setUserId(user.getId());
         return workoutDto;
     }
 
     public WorkoutDto getWorkout(Long id) {
-        return workoutMapper.mapToDto(workoutRepository.findById(id).orElse(null));    }
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
+        WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
+        workoutDto.setUserId(workout.getUser().getId());
+        return workoutDto;
+    }
 
-    public List<WorkoutDto> getAllWorkouts(){
-        return workoutMapper.mapToDto(workoutRepository.findAll());
+    public List<WorkoutDto> getAllWorkouts() {
+        List<Workout> workouts = workoutRepository.findAll();
+        return workouts.stream()
+                .map(workout -> {
+                    WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
+                    workoutDto.setUserId(workout.getUser().getId());
+                    return workoutDto;
+                })
+                .collect(Collectors.toList());
     }
 
     public WorkoutDto updateWorkout(Long id, WorkoutDto dto) {
         Assert.notNull(dto.getId(), "Id cannot be empty");
-        if(!dto.getId().equals(id)) {
+        if (!dto.getId().equals(id)) {
             throw new IdMismatchException("Ids mismatch");
         }
-        if(!workoutRepository.existsById(id)) {
+        if (!workoutRepository.existsById(id)) {
             throw new ResourceNotFoundException("Workout doesn't exist");
         }
-        Workout entity = workoutMapper.mapToEntity(dto);
-        workoutRepository.save(entity);
-        return workoutMapper.mapToDto(entity);
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        Workout workout = workoutMapper.mapToEntity(dto);
+        workout.setId(id);
+        workout.setUser(user);
+        workout = workoutRepository.save(workout);
+        dto = workoutMapper.mapToDto(workout);
+        dto.setId(workout.getId());
+        dto.setUserId(user.getId());
+        return dto;
     }
 
     public void deleteWorkout(Long id) {

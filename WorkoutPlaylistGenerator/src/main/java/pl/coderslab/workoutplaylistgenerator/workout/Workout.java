@@ -2,12 +2,10 @@ package pl.coderslab.workoutplaylistgenerator.workout;
 
 import lombok.*;
 import lombok.AllArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Component;
 import pl.coderslab.workoutplaylistgenerator.user.User;
 
 import javax.persistence.*;
-
 
 @Entity
 @Data
@@ -25,10 +23,6 @@ public class Workout {
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private WorkoutType type;
-
-    @Range(min = 1, max = 10)
-    @Column(name = "intensity")
-    private int intensity;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
