@@ -1,8 +1,10 @@
 package pl.coderslab.workoutplaylistgenerator.workout;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,7 +22,7 @@ public class WorkoutController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<WorkoutDto> createUser(@RequestBody @Valid WorkoutDto workout) {
+    public ResponseEntity<WorkoutDto> createWorkout(@RequestBody @Valid WorkoutDto workout) {
         WorkoutDto workoutDto = workoutService.createWorkout(workout);
         return ResponseEntity.ok(workoutDto);
     }
@@ -41,6 +43,12 @@ public class WorkoutController {
         }
     }
 
+    @GetMapping("/random")
+    public ResponseEntity<WorkoutDto> getRandomWorkout() {
+        WorkoutDto dto = workoutService.getRandomWorkout();
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<WorkoutDto> updateWorkout(@PathVariable Long id, @RequestBody @Valid WorkoutDto workout) {
         WorkoutDto dto = workoutService.updateWorkout(id, workout);
@@ -48,8 +56,12 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteWorkout(@PathVariable Long id) {
-        workoutService.deleteWorkout(id);
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWorkout(@PathVariable Long id) {
+        try {
+            workoutService.deleteWorkout(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found");
+        }
     }
 }

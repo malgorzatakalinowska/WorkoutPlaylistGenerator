@@ -2,13 +2,14 @@ package pl.coderslab.workoutplaylistgenerator.workout;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.webjars.NotFoundException;
 import pl.coderslab.workoutplaylistgenerator.exception.IdMismatchException;
 import pl.coderslab.workoutplaylistgenerator.exception.ResourceNotFoundException;
 import pl.coderslab.workoutplaylistgenerator.user.User;
 import pl.coderslab.workoutplaylistgenerator.user.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -32,7 +33,7 @@ public class WorkoutService {
             workoutDto.setUserId(workoutDto.getUserId());
         }
         User user = userRepository.findById(workoutDto.getUserId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Workout workout = workoutMapper.mapToEntity(workoutDto);
         workout.setUser(user);
         workout = workoutRepository.save(workout);
@@ -43,10 +44,23 @@ public class WorkoutService {
 
     public WorkoutDto getWorkout(Long id) {
         Workout workout = workoutRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Workout not found"));
         WorkoutDto workoutDto = workoutMapper.mapToDto(workout);
         workoutDto.setUserId(workout.getUser().getId());
         return workoutDto;
+    }
+
+    public WorkoutDto getRandomWorkout() {
+        List<Workout> workouts = workoutRepository.findAll();
+        if (workouts.isEmpty()) {
+            return null;
+        } else {
+            int randomIndex = new Random().nextInt(workouts.size());
+            Workout randomWorkout = workouts.get(randomIndex);
+            WorkoutDto workoutDto = workoutMapper.mapToDto(randomWorkout);
+            workoutDto.setUserId(randomWorkout.getUser().getId());
+            return workoutDto;
+        }
     }
 
     public List<WorkoutDto> getAllWorkouts() {
@@ -69,7 +83,7 @@ public class WorkoutService {
             throw new ResourceNotFoundException("Workout doesn't exist");
         }
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Workout workout = workoutMapper.mapToEntity(dto);
         workout.setId(id);
         workout.setUser(user);
