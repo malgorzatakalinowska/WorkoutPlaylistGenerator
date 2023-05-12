@@ -11,5 +11,11 @@ Content-Type: application/json
 ###get all users
 GET http://localhost:8080/users/all
 
-###get user
+###get user by id
 GET http://localhost:8080/users/7
+
+###count all users
+GET http://localhost:8080/users/all/count
+
+###delete user
+DELETE http://localhost:8080/users/10

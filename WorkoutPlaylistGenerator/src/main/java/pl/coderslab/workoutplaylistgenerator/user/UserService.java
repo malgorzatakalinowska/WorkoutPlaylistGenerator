@@ -3,6 +3,7 @@ package pl.coderslab.workoutplaylistgenerator.user;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -23,10 +24,20 @@ public class UserService {
         return userMapper.mapToDto(user);
     }
 
-    public List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers() {
         return userMapper.mapToDto(userRepository.findAll());
     }
 
     public UserDto getUser(Long id) {
-        return userMapper.mapToDto(userRepository.findById(id).orElse(null));}
+        return userMapper.mapToDto(userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found")));
+    }
+
+    public Long countAllUsers() {
+        return userRepository.count();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
 }
