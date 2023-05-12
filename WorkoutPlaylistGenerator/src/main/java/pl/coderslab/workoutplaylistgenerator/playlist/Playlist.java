@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.coderslab.workoutplaylistgenerator.track.Track;
 import pl.coderslab.workoutplaylistgenerator.user.User;
 import pl.coderslab.workoutplaylistgenerator.workout.Workout;
+import pl.coderslab.workoutplaylistgenerator.workout.WorkoutType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Entity
 @Data
@@ -41,10 +40,7 @@ public class Playlist {
     @JoinColumn(name = "workout_id")
     private Workout workout;
 
-    @ManyToMany
-    @JoinTable(name = "playlist_tracks",
-        joinColumns = @JoinColumn(name = "playlist_id"),
-        inverseJoinColumns = @JoinColumn(name = "track_id"))
-    private List<Track> tracks = new ArrayList<>();
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "workout_type")
+    private WorkoutType workoutType;
 }
