@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Data
@@ -23,6 +24,7 @@ public class User {
     @Column(unique = true, name = "user_id")
     private Long id;
 
+    @Size(min = 3, max = 20)
     @Column(name = "display_name")
     private String displayName;
 
