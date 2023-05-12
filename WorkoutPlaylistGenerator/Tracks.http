@@ -1,0 +1,8 @@
+### save tracks
+POST http://localhost:8080/tracks/save?playlistId=26
+
+### get all tracks
+GET http://localhost:8080/tracks/all
+
+### get track by id
+GET http://localhost:8080/tracks/404
